@@ -1,5 +1,6 @@
 import sys
 import os.path
+import csv
 
 def main():
     if len(sys.argv) <= 1:
@@ -21,15 +22,16 @@ def main():
     print 'Parsing file:', sys.argv[1]
 
 def parse_csv(filename):
-    print 'test'
-    #infile = open(file, "r")
-    #while infile: 
-    #    line =
+    reader = csv.reader(open(filename, 'r'))
+    for row in reader:
+        print row
+
 def parse_txt(filename):
-    print 'test'
-    #infile = open(file, "r")
-    #while infile: 
-    #    line =
+    infile = open(filename, "r")
+    #while file:
+    #    line = file.readline()
+    #    print line.split(',')
+
 
 if __name__ == '__main__':
     main()
