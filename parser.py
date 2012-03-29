@@ -24,7 +24,10 @@ def main():
 def parse_csv(filename):
     reader = csv.reader(open(filename, 'r'))
     for row in reader:
-        print row
+        for i, x in enumerate(row):
+            if len(x)< 1:
+                x = row[i] = 0
+        print row    
 
 def parse_txt(filename):
     infile = open(filename, "r")
