@@ -2,7 +2,8 @@ import sys
 import os.path
 import csv
 import math
-from data_types import Data, CSVData, TextData, Vector
+import nltk
+from data_types import Data, CSVData, TXTData, Vector
 
 def main():
     files=[]
@@ -37,8 +38,26 @@ def main():
            print "Error invalid index: ", option
 
 def get_file_options_txt(data_file):
-    print 'TXT_OPTIONS'
-   
+    print '    [0] - Read file in Paragraph chunks'
+    print '    [1] - Read file in Sentence chunks'
+    print '    [2] - Read file in Word chunks'
+    print '    [3] - Create/Print word list'
+    print '    [4] - Create/Print freq list'
+    print '    [5] - Document statistics'
+    print '    [6] - Document frequency statistics'
+    print '    [7] - Check document for word'
+    file_option = int(raw_input("    Operation: "))
+
+    if file_option == 0:
+        for i, v in enumerate(data_file.paragraph_tokenize()):
+            print "Paragraph[",i,"]:\n", v
+    elif file_option == 1:
+        for i, v in enumerate(data_file.sentence_tokenize()):
+            print "Sentence[",i,"]:\n", v
+    elif file_option == 2:
+        for i, v in enumerate(data_file.word_tokenize()):
+            print "Word[",i,"]:\n", v
+
 def get_file_options_csv(data_file):
     print '    [0] - Print Vectors'
     print '    [1] - Vector Length'
@@ -52,31 +71,51 @@ def get_file_options_csv(data_file):
     print '    [9] - Standard Deviation - Collection'
     file_option = int(raw_input("Operation: "))
     
-    #Switch statment is no more =(
     if file_option == 0:
         data_file.print_vectors()
     elif file_option == 1:
         vector_index = int(raw_input("Vector index: "))
-        print data_file.vectors[vector_index].length()
+        if vector_index >= len(data_file.vectors):
+            print "Error invalid index."
+        else:
+            print data_file.vectors[vector_index].length()
     elif file_option == 2:
         vector_index = raw_input("Vector index pair: ").split(" ")
-        print data_file.dot_product(int(vector_index[0]), int(vector_index[1]))    
+        if vector_index[0] >= len(data_file.vectors) or vector_index[1] >= len(data_file.vectors):
+				print "Error invalid index."
+        else:
+            print data_file.dot_product(int(vector_index[0]), int(vector_index[1]))    
     elif file_option == 3:
         vector_index = raw_input("Vector index pair: ").split(" ")
-        print data_file.euclidian(int(vector_index[0]), int(vector_index[1])) 
+        if vector_index[0] >= len(data_file.vectors) or vector_index[1] >= len(data_file.vectors):
+            print "Error invalid index."
+        else:
+            print data_file.euclidian(int(vector_index[0]), int(vector_index[1])) 
     elif file_option == 4:
         vector_index = raw_input("Vector index pair: ").split(" ")
-        print data_file.manhattan(int(vector_index[0]), int(vector_index[1])) 
+        if vector_index[0] >= len(data_file.vectors) or vector_index[1] >= len(data_file.vectors):
+            print "Error invalid index."
+        else:
+            print data_file.manhattan(int(vector_index[0]), int(vector_index[1])) 
     elif file_option == 5:
         vector_index = raw_input("Vector index pair: ").split(" ")
-        print data_file.pearson(int(vector_index[0]), int(vector_index[1])) 
+        if vector_index[0] >= len(data_file.vectors) or vector_index[1] >= len(data_file.vectors):
+				print "Error invalid index."
+        else:
+            print data_file.pearson(int(vector_index[0]), int(vector_index[1])) 
     elif file_option == 6:
         vector_index = raw_input("Vector index pair: ").split(" ")
-        print data_file.euclidian(int(vector_index[0]), int(vector_index[1])) 
+        if vector_index[0] >= len(data_file.vectors) or vector_index[1] >= len(data_file.vectors):
+				print "Error invalid index."
+        else:
+            print data_file.euclidian(int(vector_index[0]), int(vector_index[1])) 
     elif file_option == 7:
         vector_index = int(raw_input("Vector index: "))
-        vector = data_file.vectors[vector_index]
-        print "Column: ", vector_index, "\nmean: ", vector.mean(), "\nmedian: ", vector.median(), "\nsmallest: ",  vector.smallest(), "\nlargest: ", vector.largest()  
+        if vector_index >= len(data_file.vectors):
+            print "Error invalid index."
+        else:
+            vector = data_file.vectors[vector_index]
+            print "Column: ", vector_index, "\nmean: ", vector.mean(), "\nmedian: ", vector.median(), "\nsmallest: ",  vector.smallest(), "\nlargest: ", vector.largest()  
         return
     elif file_option == 8:
         column = int(raw_input("Column: "))
@@ -84,8 +123,11 @@ def get_file_options_csv(data_file):
     elif file_option == 9:
         column = int(raw_input("Column: "))
         vector_index = int(raw_input("Vector index: "))
-        vector = data_file.vectors[vector_index]
-        print "Standard deviation within vector ", vector_index, ": ", vector.standard_dev(), "\nStandard deviation in column ", column, ": ", data_file.standard_dev(column) 
+        if vector_index >= len(data_file.vectors):
+            print "Error invalid index."
+        else:
+            vector = data_file.vectors[vector_index]
+            print "Standard deviation within vector ", vector_index, ": ", vector.standard_dev(), "\nStandard deviation in column ", column, ": ", data_file.standard_dev(column) 
         return
     else:
         print "Invalid operation." 
@@ -106,14 +148,16 @@ def check_load_file(filename, files):
     if filetype == 'csv':
         csv_data = CSVData(filename)
         csv_data.parse_vectors()
+        files.append(csv_data)
         #csv_data.print_vectors()
     elif filetype == 'txt':
-        parse_txt(sys.argv[1])
+        txt_data = TXTData(filename)
+        txt_data.read_document()
+        files.append(txt_data)
     else:
         print 'Error unrecognized file type ', filetype
         return
 
-    files.append(csv_data)
     print 'Parsed file: ', filename 
 
 if __name__ == '__main__':
