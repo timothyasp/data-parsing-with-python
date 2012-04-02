@@ -2,7 +2,7 @@ import sys
 import os.path
 import csv
 import math
-import nltk
+#import nltk
 from data_types import Data, CSVData, TXTData, Vector
 
 def main():
@@ -11,7 +11,7 @@ def main():
         print 'Error no files specified'
         return
 
-    #load all files appearing in arguments
+    # load all files appearing in arguments
     for x in range(1, len(sys.argv)):
         check_load_file(sys.argv[x], files)     
 
@@ -57,6 +57,23 @@ def get_file_options_txt(data_file):
     elif file_option == 2:
         for i, v in enumerate(data_file.word_tokenize()):
             print "Word[",i,"]:\n", v
+    elif file_option == 3:
+        for i, v in enumerate(data_file.word_tokenize()):
+            print "Word[",i,"]:\n", v
+    elif file_option == 4:
+        for i, v in enumerate(data_file.word_tokenize()):
+            print "Word[",i,"]:\n", v
+    elif file_option == 5:
+        for i, v in enumerate(data_file.word_tokenize()):
+            print "Word[",i,"]:\n", v
+    elif file_option == 6:
+        for i, v in enumerate(data_file.word_tokenize()):
+            print "Word[",i,"]:\n", v
+    elif file_option == 7:
+        for i, v in enumerate(data_file.word_tokenize()):
+            print "Word[",i,"]:\n", v
+    else:
+        print "Error invalid index: ", option
 
 def get_file_options_csv(data_file):
     print '    [0] - Print Vectors'

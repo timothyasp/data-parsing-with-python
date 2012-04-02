@@ -2,7 +2,8 @@ import sys
 import os.path
 import csv
 import math
-import nltk
+import re
+#import nltk
 
 class Vector:
     def __init__(self, values):
@@ -19,7 +20,10 @@ class Vector:
         return math.sqrt(val)
 
     def mean(self):
-        return
+        val = 0
+        for x in self.values:
+            val += float(x);
+        return val/len(self.values)
  
     def median(self):
         return
@@ -73,6 +77,7 @@ class CSVData(Data):
         return
    
     def dot_product(self, i1, i2):
+        
         return
    
     def euclidian(self, i1, i2):
@@ -100,12 +105,13 @@ class TXTData(Data):
 
     def sentence_tokenize(self):
         regexp = r'\.(\s+|$)'
+        se_break = re.compile([.?!])
+        return se_break.split(self.document.text)
         #tokenizer = RegexpTokenizer(regexp)
         #sentences = regexp_tokenize(self.document.text, pattern=r'\.(\s+|$)', gaps=True)
-        return 
 
     def word_tokenize(self):
-        return
+        return self.document.text.split();
 
     def print_unique_word_list(self):
         return
