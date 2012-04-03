@@ -61,31 +61,65 @@ class CSVData(Data):
         for x in self.vectors:
             x.dump()
 
-    def largest(self):
-        return
+    def largest(self, c1):
+        max_val = float("-inf")
+        for x in self.vectors:
+            if x[c1] >= max_val:
+                max_val = x[c1]
+
+        return max_val
    
-    def smallest(self):
-        return
+    def  smallest(self, c1):
+        min_val = float("inf")
+        for x in self.vectors:
+            if x[c1] <= min_val:
+                min_val = x[c1] 
+        return min_val
    
-    def mean(self):
-        return
+    def mean(self, c1):
+        sum = 0;
+        for x in self.vectors:
+            sum += x[c1]
+        return sum / len(self.vectors)
    
-    def median(self):
-        return
+    def median(self, c1):
+        float_list = []
+        for x in self.vectors:
+            float_list.append(x[c1])
+        float_list = sorted(float_list)
+
+        if len(float_list) % 2 == 0:
+            low_index = int(len(float_list)/2)
+            avg = float_list[low_index]
+            avg += float_list[low_index+1]
+            return float(avg/2)
+        else: 
+            return float_list[len(float_list)/2]
    
     def standard_dev(self, c1):
         return
    
     def dot_product(self, i1, i2):
-        
         return
    
     def euclidian(self, i1, i2):
-        return
-   
+        val = manhattan(i1, i1);
+        return Math.sqrt(val)
+
     def manhattan(self, i1, i2):
-        return
-   
+        v1 = vectors[i1]
+        v2 = vectors[i2]
+        if len(v1) != len(v2): 
+           print 'Error can not compute distance between unequal vector lengths.'
+           return
+        else:
+           total = 0
+           for i in range(len(v1)):
+              val = v1[i] - v2[i]
+              val = val * val
+              total += val
+           return total
+
     def pearson(self, i1, i2):
         return
 
@@ -105,10 +139,11 @@ class TXTData(Data):
 
     def sentence_tokenize(self):
         regexp = r'\.(\s+|$)'
-        se_break = re.compile([.?!])
-        return se_break.split(self.document.text)
+        #se_break = re.compile([.?!])
+        #return se_break.split(self.document.text)
         #tokenizer = RegexpTokenizer(regexp)
         #sentences = regexp_tokenize(self.document.text, pattern=r'\.(\s+|$)', gaps=True)
+        return
 
     def word_tokenize(self):
         return self.document.text.split();
