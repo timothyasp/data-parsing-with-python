@@ -199,39 +199,94 @@ class CSVData(Data):
 class TXTData(Data):
     def __init__(self, filename):
         super(TXTData, self).__init__(filename)		  
+        self.words = []
+        self.paragraphs = []
+        self.sentences = []
 
     def read_document(self):
         file_in = open(self.filename, 'r')
         self.document = Document(file_in.read())
 
     def paragraph_tokenize(self):
-        paragraphs = self.document.text.split("\n\n")
-        this.document.paragraph_count = len(paragraphs)
-        return paragraphs;
+        if len(self.paragraphs) == 0:
+            self.paragraphs = self.document.text.split("\n\n")
+               
+        return self.paragraphs;
 
     def sentence_tokenize(self):
-        sentances = re.compile(r"""
-            (?:(?<=[.!?])|(?<=[.!?]['"])) # Match sentances ending with .! or ?              
-            (?<!  Mr\.)(?<!  Mrs\.)(?<!  Jr\.)(?<!  Dr\.)(?<!  Prof\.)(?<!  Sr\.)(?<!  \.\.\.)\s+ # Exclude things that'll break early
-            """, 
-            re.IGNORECASE | re.VERBOSE)
-
-        return sentances.split(self.document.text)
+        if len(self.sentences) == 0:
+            sentence_reg_exp = re.compile(r"""
+                (?:(?<=[.!?])|(?<=[.!?]['"])) # Match sentances ending with .! or ?              
+                (?<!  Mr\.)(?<!  Mrs\.)(?<!  Jr\.)(?<!  Dr\.)(?<!  Prof\.)(?<!  Sr\.)(?<!  \.\.\.)\s+ # Exclude things that'll break early
+                """, 
+                re.IGNORECASE | re.VERBOSE)
+            self.sentences = sentence_reg_exp.split(self.document.text)
+        return self.sentences 
 
     def word_tokenize(self):
-        return re.findall(r"""\w+(?:')\w+|\w+(?:-)\w+|\w+""", self.document.text)
+        if len(self.words) == 0:
+            self.words = re.findall(r"""\w+(?:')\w+|\w+(?:-)\w+|\w+""", self.document.text)
+        return self.words
 
-    def print_unique_word_list(self):
-        return
-
-    def print_unique_word_frequency(self):
-        return
+    def unique_word_list(self):
+        if len(self.words) == 0:
+            self.word_tokenize()
+ 
+        word_set = set()
+        for x in self.words:
+           word_set.add(x)
+        return word_set   
+         
+    def unique_word_frequency(self):
+        if len(self.words) == 0:
+            self.word_tokenize()
+       
+        freq_dict = dict()
+        for x in self.words:
+            if freq_dict.has_key(x):
+                freq_dict[x] += 1
+            else:
+                freq_dict[x] = 1 
+        return freq_dict
 
     def print_count_statistics(self):
+        print 'Length of document in words: ', len(self.word_tokenize())
+        print 'Unique words: ', len(self.unique_word_list())
+        print 'Sentence count: ', len(self.sentence_tokenize())
+        print 'Paragraph count: ', len(self.paragraph_tokenize())
+        return
+
+    def print_freq_statistics(self, equal, greater):
+        word_dict = self.unique_word_frequency() 
+        greater_flist = []
+        equal_flist = []
+        highest_freq = 0
+        highest_freq_list = []
+      
+        for x in word_dict.keys():
+            if word_dict[x] > highest_freq:
+                highest_freq_list = []
+                highest_freq_list.append(x)
+                highest_freq = word_dict[x]
+            if word_dict[x] == highest_freq:
+                highest_freq_list.append(x)  
+            if word_dict[x] > int(greater):
+                greater_flist.append(x)
+            if word_dict[x] == int(equal):
+                equal_flist.append(x)
+
+        print 'Highest Frequency: ', highest_freq 
+        print 'Words with frequency ', highest_freq
+        print highest_freq_list
+        print 'Words with frequency greater than ', greater
+        print greater_flist
+        print 'Words with frequency equal to ', equal
+        print equal_flist
         return
 
     def word_search(self, word):
-        return
+        word_dict = self.unique_word_frequency() 
+        return word_dict.has_key(word)
 
 
 class Document:
