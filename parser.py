@@ -69,11 +69,11 @@ def get_file_options_txt(data_file):
             for k in word_dict.keys():
                 print k, ":", word_dict[k]
         elif file_option == 5:
-            data_file.print_count_statistics()
+            print data_file.print_count_statistics()
         elif file_option == 6:
             greater = raw_input("Find words with frequencies greater than: ")
             equal = raw_input("Find words with frequencies equal to: ")
-            data_file.print_freq_statistics(equal, greater)
+            print data_file.print_freq_statistics(equal, greater)
         elif file_option == 7:
             search_word = raw_input("Search for word: ")
             if data_file.word_search(search_word) == False:
@@ -185,11 +185,13 @@ def run_test_suite():
             continue
         filePath = os.path.join(csvPath, fname)
         data = CSVData(filePath)
+        output += "##################\n"
         output += "Opening "
         output += fname
-        output += "Parsing Vectors...\n"
+        output += "\n##################"
+        output += "\nParsing Vectors...\n"
         data.parse_vectors()
-
+        output += data.print_output()
 
     output += "Beginning TXT tests\n\n"
     for fname in txtList:

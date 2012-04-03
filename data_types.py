@@ -24,14 +24,19 @@ class Vector:
         val = 0
         for x in self.values:
             val += x;
-        return val/len(self.values)
+        if len(self.values) != 0:
+            return val/len(self.values)
  
     def median(self):
         nums = sorted(self.values)
         size = len(nums)
         midPos = size / 2
-
-        if size % 2 == 0:
+        
+        if size == 1:
+            median = nums[0]
+        elif size == 0:
+            median = 0
+        elif size % 2 == 0:
             median = (nums[midPos] + nums[midPos-1]) / 2.0
         else:
             median = nums[midPos]
@@ -64,8 +69,12 @@ class Vector:
         for i in range(len(float_list)):
             mysum += float_list[i]
             sum_sqrs += float_list[i] * float_list[i]
-        average = mysum / len(self.values)
-        variance = sum_sqrs / len(self.values) - average * average
+
+        if (len(self.values) > 0):
+            average = mysum / len(self.values)
+            variance = sum_sqrs / len(self.values) - average * average
+        else:
+            return 0
 
         return math.sqrt(variance)
   
@@ -122,7 +131,11 @@ class CSVData(Data):
                 print 'Error encoutered a vector smaller than ', c1
                 return
             float_list.append(x.values[c1])
-        return sum(float_list)/len(float_list)
+        if len(float_list) != 0:
+            return sum(float_list)/len(float_list)
+        else:
+            return 0;
+        
  
     def median(self, c1):
         float_list = []
@@ -217,6 +230,54 @@ class CSVData(Data):
         for i in range(len(v1)):
             pearson_cor += ((v1[i]-mean_v1) * (v2[i]-mean_v2))/((len(v1)-1)*std_v1*std_v2)
         return pearson_cor
+
+    def print_output(self):
+        v1ndx = 0
+        v2ndx = 1
+        output = ''
+
+        output += "Current Data: \n"
+        for i in range(len(self.vectors)):
+            output += str(self.vectors[i].values)
+            output += "\n"
+        output += "\n Data statistics by Vector: "
+        #for i in range(len(self.vectors)):
+        output += "\n\nVector "
+        output += str(v1ndx) 
+        output += " " + str(self.vectors[v1ndx].values)
+        output += "\nMean:"
+        output += str(self.vectors[v1ndx].mean())
+        output += "\nMedian:"
+        output += str(self.vectors[v1ndx].median())
+        output += "\nSmallest:"
+        output += str(self.vectors[v1ndx].smallest())
+        output += "\nLargest:"
+        output += str(self.vectors[v1ndx].largest())
+        output += "\nStandard Deviation:"
+        output += str(self.vectors[i].standard_dev())
+
+        output += "\n\n Column Tests on Column 1"
+        output += "\nMean:"
+        output += str(self.mean(v1ndx))
+        output += "\nMedian:"
+        output += str(self.median(v1ndx))
+        output += "\nSmallest:"
+        output += str(self.smallest(v1ndx))
+        output += "\nLargest:"
+        output += str(self.largest(v1ndx))
+        output += "\nStandard Deviation:"
+        output += str(self.standard_dev_column(v1ndx))
+        output += "\nOther tests on index " + str(v1ndx) + " and index " + str(v2ndx)
+        output += "\nDot Product:"
+        output += str(self.dot_product(v1ndx, v2ndx))
+        output += "\nEuclidian:"
+        output += str(self.euclidian(v1ndx, v2ndx))
+        output += "\nManhatten:"
+        output += str(self.manhattan(v1ndx, v2ndx))
+        output += "\nPearson:"
+        output += str(self.pearson(v1ndx, v2ndx))
+        output += "\n\n"
+        return output
     
     def test(self):
         print 'Testing VECTOR methods: '
