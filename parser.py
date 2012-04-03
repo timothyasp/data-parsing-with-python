@@ -139,7 +139,7 @@ def get_file_options_csv(data_file):
         return
     elif file_option == 8:
         column = int(raw_input("Column: "))
-        print "Vector: ", vector_index, "\nmean: ", data_file.mean(), "\nmedian: ", data_file.median(), "\nsmallest: ",  data_file.smallest(), "\nlargest: ", data_file.largest()  
+        print "Vector: ", column, "\nmean: ", data_file.mean(), "\nmedian: ", data_file.median(), "\nsmallest: ",  data_file.smallest(), "\nlargest: ", data_file.largest()  
     elif file_option == 9:
         column = int(raw_input("Column: "))
         vector_index = int(raw_input("Vector index: "))
