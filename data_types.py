@@ -97,28 +97,28 @@ class CSVData(Data):
     def largest(self, c1):
         max_val = float("-inf")
         for x in self.vectors:
-            if x[c1] >= max_val:
-                max_val = x[c1]
+            if x.values[c1] >= max_val:
+                max_val = x.values[c1]
 
         return max_val
    
-    def  smallest(self, c1):
+    def smallest(self, c1):
         min_val = float("inf")
         for x in self.vectors:
-            if x[c1] <= min_val:
-                min_val = x[c1] 
+            if x.values[c1] <= min_val:
+                min_val = x.values[c1] 
         return min_val
    
     def mean(self, c1):
-        sum = 0;
+        float_list = []
         for x in self.vectors:
-            sum += x[c1]
-        return sum / len(self.vectors)
-   
+            float_list.append(x.values[c1])
+        return sum(float_list)/len(float_list)
+ 
     def median(self, c1):
         float_list = []
         for x in self.vectors:
-            float_list.append(x[c1])
+            float_list.append(x.values[c1])
         float_list = sorted(float_list)
 
         if len(float_list) % 2 == 0:
@@ -131,39 +131,28 @@ class CSVData(Data):
    
     def standard_dev_column(self, c1):
         float_list = []
-        for x in vectors:
-            float_list.append(x[c1])
-        mean = sum(float_list)/len(float_list)
+        for x in self.vectors:
+            float_list.append(x.values[c1])
+        mysum = 0
+        sum_sqrs = 0
+
         for i in range(len(float_list)):
-            float_list[i] -= mean
-            float_list[i] *= float_list[i]
+            mysum += float_list[i]
+            sum_sqrs += float_list[i] * float_list[i]
+        average = mysum / len(float_list)
+        variance = sum_sqrs / len(float_list) - average * average
 
-        list_sum = sum(float_list)
-        stddev = Math.sqrt(list_sum / (len(float_list)-1))
-
-        return stddev
-
-    def standard_dev_vector(self, i1):
-        float_list = vectors[i1]
-
-        mean = sum(float_list)/len(float_list)
-        for i in range(len(float_list)):
-            float_list[i] -= mean
-            float_list[i] *= float_list[i]
-        list_sum = sum(float_list)
-        stddev = Math.sqrt(list_sum / (len(float_list)-1))
-
-        return stddev
+        return math.sqrt(variance)
 
     def dot_product(self, i1, i2):
         dot_product = 0
-        for i in range(len(vectors[i1])):
-            dot_product += vectors[i1][i] * vectors[i2][i]
+        for i in range(len(self.vectors[i1].values)):
+            dot_product += self.vectors[i1].values[i] * self.vectors[i2].values[i]
         return dot_product
    
     def euclidian(self, i1, i2):
-        v1 = vectors[i1]
-        v2 = vectors[i2]
+        v1 = self.vectors[i1].values
+        v2 = self.vectors[i2].values
         if len(v1) != len(v2): 
            print 'Error can not compute distance between unequal vector lengths.'
            return
@@ -173,11 +162,11 @@ class CSVData(Data):
               val = v1[i] - v2[i]
               val = val * val
               total += val
-           return Math.sqrt(total)
+           return math.sqrt(total)
 
     def manhattan(self, i1, i2):
-        v1 = self.vectors[i1]
-        v2 = self.vectors[i2]
+        v1 = self.vectors[i1].values
+        v2 = self.vectors[i2].values
         if len(v1) != len(v2): 
            print 'Error can not compute distance between unequal vector lengths.'
            return
@@ -189,12 +178,12 @@ class CSVData(Data):
            return total
 
     def pearson(self, i1, i2):
-        v1 = self.vectors[i1]
-        v2 = self.vectors[i2]
+        v1 = self.vectors[i1].values
+        v2 = self.vectors[i2].values
         mean_v1 = sum(v1)/len(v1)
         mean_v2 = sum(v2)/len(v2) 
-        std_v1 = standard_dev_vector(i1)
-        std_v2 = standard_dev_vector(i2)
+        std_v1 = self.vectors[i1].standard_dev()
+        std_v2 = self.vectors[i2].standard_dev() 
         
         pearson_cor = 0
         for i in range(len(v1)):
@@ -220,7 +209,35 @@ class CSVData(Data):
         print 'Passed 6/6 vector methods...'
         print 'Testing CSVData methods:'
         
+        if self.mean(0) - .3333333 < .0001:
+            print 'Passed column mean'
+        if self.median(0) == 0:
+            print 'Passed column median'
+        if self.largest(0) == 1:
+            print 'Passed column largest'
+        if self.smallest(0) == 0:
+            print 'Passed column smallest'
+        if self.standard_dev_column(0) -.4717 < .001:
+            print 'Passed column stddev'
+        else:
+            print self.standard_dev_column(0)
         
+        if self.dot_product(1, 2) == 4.0:
+            print 'Passed dot product'
+        else:
+            print self.dot_product(1, 2)
+        if self.euclidian(1, 2) - 2.236 < .001 :
+            print 'Passed vectors dot product'
+        else:
+            print self.euclidian(1,2)
+        if self.manhattan(1, 2) == 5.0:
+            print 'Passed vectors manhattan'
+        else: 
+            print self.manhattan(1,2)
+        if self.pearson(2, 2) - 1.125 < .001:
+            print 'Passed vectors pearson'
+        else:
+            print self.pearson(2, 2)
         return
 
 class TXTData(Data):

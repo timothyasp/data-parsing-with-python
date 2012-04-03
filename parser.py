@@ -92,7 +92,7 @@ def get_file_options_csv(data_file):
     print '    [5]  - Pearson Correlation'
     print '    [6]  - Basic Stats - Vector'
     print '    [7]  - Basic Stats - Column'
-    print '    [8]  - Standard Deviation - Column'
+    print '    [8]  - Standard Deviation - Vector'
     print '    [9]  - Standard Deviation - Collection'
     print '    [10] - Return to File Selection Menu'
    
@@ -114,25 +114,25 @@ def get_file_options_csv(data_file):
                 print data_file.vectors[vector_index].length()
         elif file_option == 2:
             vector_index = raw_input("Vector index pair: ").split(" ")
-            if vector_index[0] >= len(data_file.vectors) or vector_index[1] >= len(data_file.vectors):
+            if int(vector_index[0]) >= len(data_file.vectors) or int(vector_index[1]) >= len(data_file.vectors):
 				    print "Error invalid index."
             else:
                 print data_file.dot_product(int(vector_index[0]), int(vector_index[1]))    
         elif file_option == 3:
             vector_index = raw_input("Vector index pair: ").split(" ")
-            if vector_index[0] >= len(data_file.vectors) or vector_index[1] >= len(data_file.vectors):
+            if int(vector_index[0]) >= len(data_file.vectors) or int(vector_index[1]) >= len(data_file.vectors):
                 print "Error invalid index."
             else:
                 print data_file.euclidian(int(vector_index[0]), int(vector_index[1])) 
         elif file_option == 4:
             vector_index = raw_input("Vector index pair: ").split(" ")
-            if vector_index[0] >= len(data_file.vectors) or vector_index[1] >= len(data_file.vectors):
+            if int(vector_index[0]) >= len(data_file.vectors) or int(vector_index[1]) >= len(data_file.vectors):
                 print "Error invalid index."
             else:
                 print data_file.manhattan(int(vector_index[0]), int(vector_index[1])) 
         elif file_option == 5:
             vector_index = raw_input("Vector index pair: ").split(" ")
-            if vector_index[0] >= len(data_file.vectors) or vector_index[1] >= len(data_file.vectors):
+            if int(vector_index[0]) >= len(data_file.vectors) or int(vector_index[1]) >= len(data_file.vectors):
 				    print "Error invalid index."
             else:
                 print data_file.pearson(int(vector_index[0]), int(vector_index[1])) 
@@ -143,28 +143,20 @@ def get_file_options_csv(data_file):
             else:
                 vector = data_file.vectors[vector_index]
                 print "Row: ", vector.values, "\nmean: ", vector.mean(), "\nmedian: ", vector.median(), "\nsmallest: ",  vector.smallest(), "\nlargest: ", vector.largest()  
-            return
         elif file_option == 7:
-            #  TODO
-            vector_index = int(raw_input("Vector column index: "))
-            if vector_index >= len(data_file.vectors):
-                print "Error invalid index."
-            else:
-                vector = data_file.h
-                print "Row: ", vector_index, "\nmean: ", vector.mean(), "\nmedian: ", vector.median(), "\nsmallest: ",  vector.smallest(), "\nlargest: ", vector.largest()  
-            return
+            column = int(raw_input("Column: "))
+            print "Vector: ", column, "\nmean: ", data_file.mean(column), "\nmedian: ", data_file.median(column), "\nsmallest: ",  data_file.smallest(column), "\nlargest: ", data_file.largest(column)  
         elif file_option == 8:
             column = int(raw_input("Column: "))
-            print "Vector: ", column, "\nmean: ", data_file.mean(), "\nmedian: ", data_file.median(), "\nsmallest: ",  data_file.smallest(), "\nlargest: ", data_file.largest()  
+            print 'Standard deviation of values in column ', column, ': '
+            print data_file.standard_dev_column(column)
         elif file_option == 9:
-            column = int(raw_input("Column: "))
             vector_index = int(raw_input("Vector index: "))
             if vector_index >= len(data_file.vectors):
                 print "Error invalid index."
             else:
                 vector = data_file.vectors[vector_index]
-                print "Standard deviation within vector ", vector_index, ": ", vector.standard_dev(), "\nStandard deviation in column ", column, ": ", data_file.standard_dev(column) 
-                return
+                print "Standard deviation within vector ", vector_index, ": ", vector.standard_dev() 
         elif file_option == 10:
             return
         elif data_file.filename == 'mydata/unittest.csv':
@@ -230,7 +222,6 @@ def check_load_file(filename, files):
         csv_data = CSVData(filename)
         csv_data.parse_vectors()
         files.append(csv_data)
-        #csv_data.print_vectors()
     elif filetype == 'txt':
         txt_data = TXTData(filename)
         txt_data.read_document()
