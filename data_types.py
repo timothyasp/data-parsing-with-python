@@ -284,19 +284,19 @@ class TXTData(Data):
 
         output += '\nHighest Frequency: '
         output += str(highest_freq)
-        output += '\nWords with frequency '
+        output += '\nWords with highest frequency '
         output += str(highest_freq)
-        output += ' - Total: '
+        output += ': '
         output += str(len(highest_freq_list))
         #print highest_freq_list
         output += '\nWords with frequency greater than ' 
         output += str(greater)
-        output += ' - Total: '
+        output += ': '
         output += str(len(greater_flist))
         #print greater_flist
         output += '\nWords with frequency equal to '
         output += str(equal)
-        output += ' - Total: '
+        output += ': '
         output += str(len(equal_flist))
         #print equal_flist
         output += "\n\n"
