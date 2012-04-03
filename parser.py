@@ -96,6 +96,10 @@ def get_file_options_csv(data_file):
     print '    [8]  - Standard Deviation - Column'
     print '    [9]  - Standard Deviation - Collection'
     print '    [10] - Return to File Selection Menu'
+   
+    if data_file.filename == 'mydata/unittest.csv':
+        print '    [11] - Test'
+     
     file_option = 0
 
     while file_option != 10:
@@ -164,6 +168,9 @@ def get_file_options_csv(data_file):
                 return
         elif file_option == 10:
             return
+        elif data_file.filename == 'mydata/unittest.csv':
+            if file_option == 11:
+                data_file.test() 
         else:
             print "Invalid operation." 
    

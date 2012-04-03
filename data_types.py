@@ -3,11 +3,12 @@ import os.path
 import csv
 import math
 import re
-#import nltk
 
 class Vector:
     def __init__(self, values):
-        self.values = values
+        self.values = []
+        for x in values:
+            self.values.append(float(x))        
     
     def dump(self):
         print self.values
@@ -15,14 +16,14 @@ class Vector:
     def length(self):
         val = 0
         for x in self.values:
-            x = float(x)
+            x = x
             val += x*x
         return math.sqrt(val)
 
     def mean(self):
         val = 0
         for x in self.values:
-            val += float(x);
+            val += x;
         return val/len(self.values)
  
     def median(self):
@@ -56,14 +57,19 @@ class Vector:
         return min
 
     def standard_dev(self):
-        n = len(self.values)
-        m = mean()
-        for a in self.values:
-            a = float(a)
-            std = std + (a - m)**2
-        return sqrt(std / float(n-1))
+        float_list = self.values
+        mysum = 0
+        sum_sqrs = 0
 
+        for i in range(len(float_list)):
+            mysum += float_list[i]
+            sum_sqrs += float_list[i] * float_list[i]
+        average = mysum / len(self.values)
+        variance = sum_sqrs / len(self.values) - average * average
 
+        return math.sqrt(variance)
+  
+ 
 class Data(object):
     def __init__(self, fn):
         self.filename = fn
@@ -194,7 +200,28 @@ class CSVData(Data):
         for i in range(len(v1)):
             pearson_cor += ((v1[i]-mean_v1) * (v2[i]-mean_v2))/((len(v1)-1)*std_v1*std_v2)
         return pearson_cor
-
+    
+    def test(self):
+        print 'Testing VECTOR methods: '
+        if self.vectors[2].length() == 2:
+            print 'Passed vector length'
+        if self.vectors[2].mean() - 0.44444444444 < .0001:
+            print 'Passed vector mean'
+        else: 
+            print self.vectors[2].mean()
+        if self.vectors[2].median() == 0:
+            print 'Passed vector median test'
+        if self.vectors[2].smallest() == 0:
+            print 'Passed vector smallest test'
+        if self.vectors[2].largest() == 1:
+            print 'Passed vector largest test'
+        if self.vectors[2].standard_dev() - .4969 < .001:
+            print 'Passed vector standard dev test'    
+        print 'Passed 6/6 vector methods...'
+        print 'Testing CSVData methods:'
+        
+        
+        return
 
 class TXTData(Data):
     def __init__(self, filename):
