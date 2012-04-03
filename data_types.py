@@ -173,7 +173,8 @@ class TXTData(Data):
         return sentances.split(self.document.text)
 
     def word_tokenize(self):
-        return re.findall(r'\w+', self.document.text)
+        
+        return re.findall(r"""\w+(?:')\w+|\w+(?:-)\w+|\w+""", self.document.text)
 
     def print_unique_word_list(self):
         return
