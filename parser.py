@@ -1,5 +1,5 @@
 import sys
-import os.path
+import os
 import csv
 import math
 #import nltk
@@ -8,8 +8,7 @@ from data_types import Data, CSVData, TXTData, Vector
 def main():
     files=[]
     if len(sys.argv) <= 1:
-        print 'Error no files specified'
-        return
+        run_test_suite()
 
     # load all files appearing in arguments
     for x in range(1, len(sys.argv)):
@@ -17,25 +16,55 @@ def main():
 
     print_available_files(files)
     while True:
-       print "Choose the file's index on which to operate (10 to load a new file, 11 to exit): "
-       option = input()
-       
-       if int(option) == 10:
-           print "Enter new path and filename to load: "
-           new_file = raw_input()
-           print new_file 
-           check_load_file(new_file, files)
-           print_available_files(files)     
-       elif int(option) == 11:
-           print "Exiting.."
-           return
-       elif int(option) < len(files):
-           if files[int(option)].filetype == 'csv':
-               get_file_options_csv(files[int(option)])
-           else:
-               get_file_options_txt(files[int(option)])
-       else:
-           print "Error invalid index: ", option
+        print "Choose the file's index on which to operate (10 to load a new file, 11 to exit): "
+        option = input()
+
+        if int(option) == 10:
+            print "Enter new path and filename to load: "
+            new_file = raw_input()
+            print new_file 
+            check_load_file(new_file, files)
+            print_available_files(files)     
+        elif int(option) == 11:
+            print "Exiting.."
+            return
+        elif int(option) < len(files):
+            if files[int(option)].filetype == 'csv':
+                get_file_options_csv(files[int(option)])
+            else:
+                get_file_options_txt(files[int(option)])
+        else:
+            print "Error invalid option: ", option
+
+def run_test_suite():
+    csvPath = 'data/csv'
+    txtPath = 'data/text'
+
+    print "Grabbing CSV files...\n"
+    csvList = os.listdir(csvPath)
+
+    print "Grabbing TXT files...\n"
+    txtList = os.listdir(txtPath)
+    
+    print "Beginning CSV tests\n\n"
+    for fname in csvList:
+        if fname.split('.')[1] != 'csv':
+            continue
+        filePath = os.path.join(csvPath, fname)
+        data = CSVData(filePath)
+        print "Opening ",fname
+        print "Parsing Vectors...\n"
+        data.parse_vectors()
+
+    print "Beginning TXT tests\n\n"
+    for fname in txtList:
+        if fname.split('.')[1] != 'txt':
+            continue
+        filePath = os.path.join(txtPath, fname)
+        data = TXTData(filePath)
+        print "Opening ",fname
+        print "Parsing Text and reading into Document...\n"
+        data.read_document()
 
 def get_file_options_txt(data_file):
     print '    [0] - Read file in Paragraph chunks'
