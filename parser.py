@@ -7,8 +7,7 @@ from data_types import Data, CSVData, TXTData, Vector
 def main():
     files=[]
     if len(sys.argv) <= 1:
-        print 'Error no files specified'
-        return
+        run_test_suite()
 
     # load all files appearing in arguments
     for x in range(1, len(sys.argv)):
@@ -173,8 +172,48 @@ def get_file_options_csv(data_file):
                 data_file.test() 
         else:
             print "Invalid operation." 
-   
-    return
+
+def run_test_suite():
+    greater = raw_input("Find words with frequencies greater than: ")
+    equal = raw_input("Find words with frequencies equal to: ")
+    csvPath = 'data/csv'
+    txtPath = 'data/text'
+
+    output = ''
+
+    output += "Grabbing CSV files...\n"
+    csvList = os.listdir(csvPath)
+
+    output += "Grabbing TXT files...\n"
+    txtList = os.listdir(txtPath)
+
+    output += "Beginning CSV tests\n\n"
+    for fname in csvList:
+        if fname.split('.')[1] != 'csv':
+            continue
+        filePath = os.path.join(csvPath, fname)
+        data = CSVData(filePath)
+        output += "Opening "
+        output += fname
+        output += "Parsing Vectors...\n"
+        data.parse_vectors()
+
+
+    output += "Beginning TXT tests\n\n"
+    for fname in txtList:
+        if fname.split('.')[1] != 'txt':
+            continue
+        filePath = os.path.join(txtPath, fname)
+        data = TXTData(filePath) 
+        output += "\nOpening "
+        output += fname
+        data.read_document()
+        output += data.print_count_statistics()
+        output += data.print_freq_statistics(equal, greater)
+
+    f = open('output.test', 'w')
+    f.write(output)
+    f.close()
 
 def print_available_files(files):
     for x in range(0, len(files)):

@@ -277,11 +277,16 @@ class TXTData(Data):
         return freq_dict
 
     def print_count_statistics(self):
-        print 'Length of document in words: ', len(self.word_tokenize())
-        print 'Unique words: ', len(self.unique_word_list())
-        print 'Sentence count: ', len(self.sentence_tokenize())
-        print 'Paragraph count: ', len(self.paragraph_tokenize())
-        return
+        output = ''
+        output += '\nLength of document in words: ' 
+        output += str(len(self.word_tokenize()))
+        output += '\nUnique words: ' 
+        output += str(len(self.unique_word_list()))
+        output += '\nSentence count: ' 
+        output += str(len(self.sentence_tokenize()))
+        output += '\nParagraph count: ' 
+        output += str(len(self.paragraph_tokenize()))
+        return output
 
     def print_freq_statistics(self, equal, greater):
         word_dict = self.unique_word_frequency() 
@@ -302,19 +307,31 @@ class TXTData(Data):
             if word_dict[x] == int(equal):
                 equal_flist.append(x)
 
-        print 'Highest Frequency: ', highest_freq 
-        print 'Words with frequency ', highest_freq
-        print highest_freq_list
-        print 'Words with frequency greater than ', greater
-        print greater_flist
-        print 'Words with frequency equal to ', equal
-        print equal_flist
-        return
+        output = ''
+
+        output += '\nHighest Frequency: '
+        output += str(highest_freq)
+        output += '\nWords with highest frequency '
+        output += str(highest_freq)
+        output += ': '
+        output += str(len(highest_freq_list))
+        #print highest_freq_list
+        output += '\nWords with frequency greater than ' 
+        output += str(greater)
+        output += ': '
+        output += str(len(greater_flist))
+        #print greater_flist
+        output += '\nWords with frequency equal to '
+        output += str(equal)
+        output += ': '
+        output += str(len(equal_flist))
+        #print equal_flist
+        output += "\n\n"
+        return output
 
     def word_search(self, word):
         word_dict = self.unique_word_frequency() 
         return word_dict.has_key(word)
-
 
 class Document:
     def __init__(self, text):
