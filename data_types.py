@@ -63,6 +63,7 @@ class Vector:
             std = std + (a - m)**2
         return sqrt(std / float(n-1))
 
+
 class Data(object):
     def __init__(self, fn):
         self.filename = fn
@@ -122,17 +123,39 @@ class CSVData(Data):
         else: 
             return float_list[len(float_list)/2]
    
-    def standard_dev(self, c1):
-        return
-   
+    def standard_dev_column(self, c1):
+        float_list = []
+        for x in vectors:
+            float_list.append(x[c1])
+        mean = sum(float_list)/len(float_list)
+        for i in range(len(float_list)):
+            float_list[i] -= mean
+            float_list[i] *= float_list[i]
+
+        list_sum = sum(float_list)
+        stddev = Math.sqrt(list_sum / (len(float_list)-1))
+
+        return stddev
+
+    def standard_dev_vector(self, i1):
+        float_list = vectors[i1]
+
+        mean = sum(float_list)/len(float_list)
+        for i in range(len(float_list)):
+            float_list[i] -= mean
+            float_list[i] *= float_list[i]
+        list_sum = sum(float_list)
+        stddev = Math.sqrt(list_sum / (len(float_list)-1))
+
+        return stddev
+
     def dot_product(self, i1, i2):
-        return
+        dot_product = 0
+        for i in range(len(vectors[i1])):
+            dot_product += vectors[i1][i] * vectors[i2][i]
+        return dot_product
    
     def euclidian(self, i1, i2):
-        val = manhattan(i1, i1);
-        return Math.sqrt(val)
-
-    def manhattan(self, i1, i2):
         v1 = vectors[i1]
         v2 = vectors[i2]
         if len(v1) != len(v2): 
@@ -144,10 +167,33 @@ class CSVData(Data):
               val = v1[i] - v2[i]
               val = val * val
               total += val
+           return Math.sqrt(total)
+
+    def manhattan(self, i1, i2):
+        v1 = self.vectors[i1]
+        v2 = self.vectors[i2]
+        if len(v1) != len(v2): 
+           print 'Error can not compute distance between unequal vector lengths.'
+           return
+        else:
+           total = 0
+           for i in range(len(v1)):
+              val = v1[i] - v2[i]
+              total += val
            return total
 
     def pearson(self, i1, i2):
-        return
+        v1 = self.vectors[i1]
+        v2 = self.vectors[i2]
+        mean_v1 = sum(v1)/len(v1)
+        mean_v2 = sum(v2)/len(v2) 
+        std_v1 = standard_dev_vector(i1)
+        std_v2 = standard_dev_vector(i2)
+        
+        pearson_cor = 0
+        for i in range(len(v1)):
+            pearson_cor += ((v1[i]-mean_v1) * (v2[i]-mean_v2))/((len(v1)-1)*std_v1*std_v2)
+        return pearson_cor
 
 
 class TXTData(Data):
