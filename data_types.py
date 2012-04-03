@@ -97,6 +97,9 @@ class CSVData(Data):
     def largest(self, c1):
         max_val = float("-inf")
         for x in self.vectors:
+            if c1 >= len(x.values):
+                print 'Error encoutered a vector smaller than ', c1
+                return
             if x.values[c1] >= max_val:
                 max_val = x.values[c1]
 
@@ -105,6 +108,9 @@ class CSVData(Data):
     def smallest(self, c1):
         min_val = float("inf")
         for x in self.vectors:
+            if c1 >= len(x.values):
+                print 'Error encoutered a vector smaller than ', c1
+                return
             if x.values[c1] <= min_val:
                 min_val = x.values[c1] 
         return min_val
@@ -112,12 +118,18 @@ class CSVData(Data):
     def mean(self, c1):
         float_list = []
         for x in self.vectors:
+            if c1 >= len(x.values):
+                print 'Error encoutered a vector smaller than ', c1
+                return
             float_list.append(x.values[c1])
         return sum(float_list)/len(float_list)
  
     def median(self, c1):
         float_list = []
         for x in self.vectors:
+            if c1 >= len(x.values):
+                print 'Error encoutered a vector smaller than ', c1
+                return
             float_list.append(x.values[c1])
         float_list = sorted(float_list)
 
@@ -132,6 +144,9 @@ class CSVData(Data):
     def standard_dev_column(self, c1):
         float_list = []
         for x in self.vectors:
+            if c1 >= len(x.values):
+                print 'Error encoutered a vector smaller than ', c1
+                return
             float_list.append(x.values[c1])
         mysum = 0
         sum_sqrs = 0
@@ -145,6 +160,10 @@ class CSVData(Data):
         return math.sqrt(variance)
 
     def dot_product(self, i1, i2):
+        if len(self.vectors[i1].values) != len(self.vectors[i2].values):
+            print "Error unequal length vectors."
+            return
+
         dot_product = 0
         for i in range(len(self.vectors[i1].values)):
             dot_product += self.vectors[i1].values[i] * self.vectors[i2].values[i]
@@ -167,6 +186,7 @@ class CSVData(Data):
     def manhattan(self, i1, i2):
         v1 = self.vectors[i1].values
         v2 = self.vectors[i2].values
+        
         if len(v1) != len(v2): 
            print 'Error can not compute distance between unequal vector lengths.'
            return
@@ -180,11 +200,19 @@ class CSVData(Data):
     def pearson(self, i1, i2):
         v1 = self.vectors[i1].values
         v2 = self.vectors[i2].values
+        
+        if len(v1) != len(v2):
+            print 'Error: Vectors of unequal length.'
+            return
+
         mean_v1 = sum(v1)/len(v1)
         mean_v2 = sum(v2)/len(v2) 
         std_v1 = self.vectors[i1].standard_dev()
         std_v2 = self.vectors[i2].standard_dev() 
         
+        if std_v1 == 0 or std_v2 == 0:
+            print 'Error: Avoiding divide by zero error.'
+            return
         pearson_cor = 0
         for i in range(len(v1)):
             pearson_cor += ((v1[i]-mean_v1) * (v2[i]-mean_v2))/((len(v1)-1)*std_v1*std_v2)
