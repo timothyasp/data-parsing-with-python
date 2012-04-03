@@ -26,16 +26,42 @@ class Vector:
         return val/len(self.values)
  
     def median(self):
-        return
+        nums = sorted(self.values)
+        size = len(nums)
+        midPos = size / 2
+
+        if size % 2 == 0:
+            median = (nums[midPos] + nums[midPos-1]) / 2.0
+        else:
+            median = nums[midPos]
+
+        return median
 
     def largest(self):
-        return
+        max = float("-inf")
+        for x in self.values:
+            num = float(x)
+            if num > max:
+                max = num
+            
+        return max
 
     def smallest(self):
-        return
+        min = float("inf")
+        for x in self.values:
+            num = float(x)
+            if num < min:
+                min = num
+            
+        return min
 
-    def standard_ddev(self):
-        return
+    def standard_dev(self):
+        n = len(self.values)
+        m = mean()
+        for a in self.values:
+            a = float(a)
+            std = std + (a - m)**2
+        return sqrt(std / float(n-1))
 
 class Data(object):
     def __init__(self, fn):
@@ -77,7 +103,6 @@ class CSVData(Data):
         return
    
     def dot_product(self, i1, i2):
-        
         return
    
     def euclidian(self, i1, i2):
@@ -105,10 +130,11 @@ class TXTData(Data):
 
     def sentence_tokenize(self):
         regexp = r'\.(\s+|$)'
-        se_break = re.compile([.?!])
-        return se_break.split(self.document.text)
+        #se_break = re.compile([.?!])
+        #return se_break.split(self.document.text)
         #tokenizer = RegexpTokenizer(regexp)
         #sentences = regexp_tokenize(self.document.text, pattern=r'\.(\s+|$)', gaps=True)
+        return
 
     def word_tokenize(self):
         return self.document.text.split();
