@@ -83,7 +83,7 @@ def get_file_options_csv(data_file):
     print '    [4] - Manhattan Distance'
     print '    [5] - Pearson Correlation'
     print '    [6] - Basic Stats - Vector'
-    print '    [7] - Basic Stats - Collection'
+    print '    [7] - Basic Stats - Column'
     print '    [8] - Standard Deviation - Column'
     print '    [9] - Standard Deviation - Collection'
     file_option = int(raw_input("Operation: "))
@@ -121,18 +121,21 @@ def get_file_options_csv(data_file):
         else:
             print data_file.pearson(int(vector_index[0]), int(vector_index[1])) 
     elif file_option == 6:
-        vector_index = raw_input("Vector index pair: ").split(" ")
-        if vector_index[0] >= len(data_file.vectors) or vector_index[1] >= len(data_file.vectors):
-				print "Error invalid index."
-        else:
-            print data_file.euclidian(int(vector_index[0]), int(vector_index[1])) 
-    elif file_option == 7:
         vector_index = int(raw_input("Vector index: "))
         if vector_index >= len(data_file.vectors):
             print "Error invalid index."
         else:
             vector = data_file.vectors[vector_index]
-            print "Column: ", vector_index, "\nmean: ", vector.mean(), "\nmedian: ", vector.median(), "\nsmallest: ",  vector.smallest(), "\nlargest: ", vector.largest()  
+            print "Row: ", vector.values, "\nmean: ", vector.mean(), "\nmedian: ", vector.median(), "\nsmallest: ",  vector.smallest(), "\nlargest: ", vector.largest()  
+        return
+    elif file_option == 7:
+        #  TODO
+        vector_index = int(raw_input("Vector column index: "))
+        if vector_index >= len(data_file.vectors):
+            print "Error invalid index."
+        else:
+            vector = data_file.h
+            print "Row: ", vector_index, "\nmean: ", vector.mean(), "\nmedian: ", vector.median(), "\nsmallest: ",  vector.smallest(), "\nlargest: ", vector.largest()  
         return
     elif file_option == 8:
         column = int(raw_input("Column: "))
