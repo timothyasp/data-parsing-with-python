@@ -164,15 +164,16 @@ class TXTData(Data):
         return paragraphs;
 
     def sentence_tokenize(self):
-        regexp = r'\.(\s+|$)'
-        #se_break = re.compile([.?!])
-        #return se_break.split(self.document.text)
-        #tokenizer = RegexpTokenizer(regexp)
-        #sentences = regexp_tokenize(self.document.text, pattern=r'\.(\s+|$)', gaps=True)
-        return
+        sentances = re.compile(r"""
+            (?:(?<=[.!?])|(?<=[.!?]['"])) # Match sentances ending with .! or ?              
+            (?<!  Mr\.)(?<!  Mrs\.)(?<!  Jr\.)(?<!  Dr\.)(?<!  Prof\.)(?<!  Sr\.)(?<!  \.\.\.)\s+ # Exclude things that'll break early
+            """, 
+            re.IGNORECASE | re.VERBOSE)
+
+        return sentances.split(self.document.text)
 
     def word_tokenize(self):
-        return self.document.text.split();
+        return re.findall(r'\w+', self.document.text)
 
     def print_unique_word_list(self):
         return
